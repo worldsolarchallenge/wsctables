@@ -1,13 +1,43 @@
 # See https://packaging.python.org/en/latest/tutorials/packaging-projects/
 
+[project]
+name = "wsctables"
+dynamic = ["version"]
+dependencies = [
+    "packaging>=22.0",
+    "setuptools_scm>=8",
+    "Flask",
+    "Werkzeug",
+    "Jinja2",
+    "Flask-CacheControl",
+    "Flask-Caching",
+    "flask_cors",
+    "simplejson",
+]
+
 [build-system]
-requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools>=64", "wheel", "setuptools_scm[toml]>=8"]
 build-backend = "setuptools.build_meta"
 
 [tool.black]
+target-version = ['py313']
 line-length = 120
 
-[tool.setuptools_scm]
-
-[tool.pylint]
+[tool.pylint.format]
 max-line-length = 120
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = """
+    fixme,
+    redefined-outer-name
+"""
+
+[tool.setuptools_scm]
+root="."
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+
+#[project.scripts]
+#script-name = "python_file_name:main"
