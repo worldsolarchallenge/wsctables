@@ -41,26 +41,25 @@ window.wsc = (function() {
 
       rows = [];
       columns = [];
-      for (const [teamint, teamstatus] of Object.entries(data)) {
-        if (columns.length === 0) {
-          columns = Object.keys(teamstatus).filter(key => key !== 'teamnum' && key !== 'teamname');
-        }
 
-        console.log(`${teamint}: ${teamstatus}`);
+      teamnums = Object.keys(data);
+      categories = Object.keys(data[teamnums[0]]).filter(cat => cat !== 'teamnum' && cat !== 'teamname');
+
+      for (const category of categories) {
         row = [];
         row.push('<tr>');
-        row.push('<td>' + teamstatus.teamnum + '</td>');
-        row.push('<td>' + teamstatus.teamname + '</td>');
+        row.push(`<td><strong>${category}</strong></td>`);
+        for (const teamnum of teamnums) {
+          status = data[teamnum][category];
 
-        for (const key of columns) {
-          if (key === 'teamnum' || key === 'teamname')
-            continue; // Skip teamnum and teamname as they are already added.
-
-          if (teamstatus[key] === 'p') {
+          if (status == 'p') {
             row.push('<td style="background-color: green;">&nbsp;&nbsp;</td>');
-          } else if (teamstatus[key] === 'f') {
+            console.log(`${teamnum} -- ${category}: "${status}" -- green`);
+          } else if (status == 'f') {
             row.push('<td style="background-color: red;">&nbsp;&nbsp;</td>');
+            console.log(`${teamnum} -- ${category}: "${status}" -- red `);
           } else {
+            console.log(`${teamnum} -- ${category}: "${status}" -- white `);
             row.push('<td style="background-color: white;">&nbsp;&nbsp;</td>');
           }
         }
@@ -71,10 +70,9 @@ window.wsc = (function() {
 
       header = [];
       header.push('<tr>');
-      header.push('<th><span>Team Number</span></th>');
-      header.push('<th><span>Team Name</span></th>');
-      for (const key of columns) {
-        header.push(`<th><span>${key}</span></th>`);
+      header.push('<th><span></span></th>');
+      for (const teamnum of teamnums) {
+        header.push(`<th><span>${data[teamnum].teamnum} ${data[teamnum].teamname}</span></th>`);
       }
       header.push('</tr>');
 
