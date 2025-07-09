@@ -1,0 +1,206 @@
+window.wsc = (function() {
+  // Table reference.
+  let table;
+
+  // Current table data, updated on a loop.
+  let data;
+
+  // URL for route kmz
+  const table_url = '{{ url_for("dynamic_scrutineering_script", _external=True) }}';
+
+  /**
+   * API utilities.
+   */
+  const api = (function() {
+    const telemetry = new URL('{{ url_for("index", _external=True) }}');
+
+    // Generic fetch.
+    async function get(base, uri, params = {}) {
+      const query = new URLSearchParams(params);
+      const search = query.toString();
+      const url = `${base.href}/${uri}` + (search ? `?${search}` : '');
+
+      const res = await fetch(url, {
+        mode: 'cors',
+      });
+
+      if (!res.ok) {
+        const message = `${res.status}: ` + await res.text();
+        // throw new Error(message);
+        return null;
+      }
+
+      const json = await res.json();
+      return json;
+    }
+
+    function renderTable(data) {
+      if (!data) {
+        return '<p>No data available</p>';
+      }
+
+      rows = [];
+      columns = [];
+      for (const [teamint, teamstatus] of Object.entries(data)) {
+        if (columns.length === 0) {
+          columns = Object.keys(teamstatus).filter(key => key !== 'teamnum' && key !== 'teamname');
+        }
+
+        console.log(`${teamint}: ${teamstatus}`);
+        row = [];
+        row.push('<tr>');
+        row.push('<td>' + teamstatus.teamnum + '</td>');
+        row.push('<td>' + teamstatus.teamname + '</td>');
+
+        for (const key of columns) {
+          if (key === 'teamnum' || key === 'teamname')
+            continue; // Skip teamnum and teamname as they are already added.
+
+          if (teamstatus[key] === 'p') {
+            row.push('<td style="background-color: green;">&nbsp;&nbsp;</td>');
+          } else if (teamstatus[key] === 'f') {
+            row.push('<td style="background-color: red;">&nbsp;&nbsp;</td>');
+          } else {
+            row.push('<td style="background-color: white;">&nbsp;&nbsp;</td>');
+          }
+        }
+        row.push('</tr>');
+
+        rows.push(row.join(''));
+      }
+
+      header = [];
+      header.push('<tr>');
+      header.push('<th><span>Team Number</span></th>');
+      header.push('<th><span>Team Name</span></th>');
+      for (const key of columns) {
+        header.push(`<th><span>${key}</span></th>`);
+      }
+      header.push('</tr>');
+
+      return `<table border="1">
+        <thead>
+          ${header.join('')}
+        </thead>
+        <tbody>
+          ${rows.join('')}
+        </tbody>
+      </table>`;
+    }
+
+    // Fetch last positions for all cars.
+    async function getTable() {
+      rdata = await get(telemetry, 'api/scrutineering/dynamic/');
+        console.log('New table data:', rdata);
+      return rdata;
+    }
+
+    return {
+      getTable,
+      renderTable,
+    }
+  })();
+
+
+  /**
+   * Looping utility.
+   * This is triggered on the map init.
+   */
+  const loop = (function() {
+    let timer = 0;
+
+    function start(timeout = 5000) {
+      clearInterval(timer);
+
+      timer = setInterval(async () => {
+        data = await api.getTable();
+        table.innerHTML = api.renderTable(data);
+      }, timeout);
+    }
+
+    function stop() {
+      clearInterval(timer);
+    }
+
+    return {
+      start,
+      stop,
+    }
+  })();
+
+
+  /**
+   * Live time-ago for fun and profit.
+   */
+  const timeago = (function() {
+    function register() {
+      const elements = document.querySelectorAll('[data-timeago]');
+      for (const element of elements) {
+        render(element);
+      }
+    }
+
+    function render(element) {
+      const when = parseInt(element.getAttribute('data-timeago'));
+      element.removeAttribute('date-timeago');
+
+      (function inner() {
+        const seconds = Math.floor((Date.now() - when) / 1000);
+
+        element.textContent = format(seconds);
+
+        if (document.body.contains(element)) {
+          setTimeout(inner, 1000);
+        }
+      })();
+    }
+
+    function format(seconds) {
+      switch (true) {
+        case seconds < 60: return `${seconds} seconds`;
+        case seconds < 3600: return `${Math.floor(seconds / 60)} minutes`;
+        case seconds < 86400: return `${Math.floor(seconds / 3600)} hours`;
+        case seconds < 604800: return `${Math.floor(seconds / 86400)} days`;
+        default: return `${Math.floor(seconds / 604800)} weeks`;
+      }
+    }
+
+    return {
+      register,
+      render,
+      format,
+    }
+  })();
+
+  /**
+   * Entry point.
+   */
+  async function initTable() {
+    if (table) {
+      throw new Error('already initialized');
+    }
+
+    table = document.getElementById("table");
+
+    data = await api.getTable();
+
+    console.log('Table data:', data);
+
+    // Loop it.
+    loop.start();
+  }
+
+  // Something for the map to tell us it's ready.
+  window.__wscinitTable = initTable;
+  // window.onload = initTable;
+
+
+  /**
+   * Exports.
+   */
+  return {
+    api,
+    loop,
+    getTable: () => table,
+  }
+})();

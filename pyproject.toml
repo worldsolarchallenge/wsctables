@@ -13,6 +13,7 @@ dependencies = [
     "Flask-Caching",
     "flask_cors",
     "simplejson",
+    "requests",
 ]
 
 [build-system]

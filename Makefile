@@ -34,9 +34,7 @@ build/testenv: pyproject.toml
 
 localtest: build/testenv
 		. $</bin/activate && \
-			INFLUX_MEASUREMENT=telemetry4 \
-			INFLUX_TOKEN=$$(cat wsc_bucket_token.key) \
-		flask --debug --app wscearth run
+			flask --debug --app wsctables run
 
 lint: build/testenv
 		source $</bin/activate && \

@@ -8,41 +8,41 @@ html, body {
     padding: 0;
 }
 
-/* Map popup boxes */
-.map-popup {
-	padding: 15px;
+th
+{
+  vertical-align: bottom;
+  text-align: center;
 }
 
-.map-popup img {
-	margin: 0 10px 0 0;
+th span
+{
+  -ms-writing-mode: tb-rl;
+  -webkit-writing-mode: vertical-rl;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
 }
 
-.map-popup a {
-	color: #222;
-}
+.rotate {
 
-.map-popup .name {
-	margin-bottom: 20px;
-	text-align: center;
-	background: #eee;
-	padding: 10px;
-}
+  transform: rotate(-90deg);
 
-.map-popup b {
-	display: inline-block;
-	width: 200px;
-}
 
-.map-popup span {
-	display: inline-block;
-	width: 200px;
-}
+  /* Legacy vendor prefixes that you probably don't need... */
 
-.map-popup span > i {
-	font-style: normal;
-	border-bottom: 1px #666 dotted;
-}
+  /* Safari */
+  -webkit-transform: rotate(-90deg);
 
-.map-popup .info {
-	font-size: 11px;
+  /* Firefox */
+  -moz-transform: rotate(-90deg);
+
+  /* IE */
+  -ms-transform: rotate(-90deg);
+
+  /* Opera */
+  -o-transform: rotate(-90deg);
+
+  /* Internet Explorer */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
 }
