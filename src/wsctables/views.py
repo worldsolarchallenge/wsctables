@@ -2,7 +2,6 @@
 """Basic app endpoints for wscearth"""
 
 import logging
-import time
 
 import flask
 import flask_cachecontrol
@@ -34,7 +33,8 @@ def tables_script():
 #@flask_cachecontrol.cache_for(seconds=30)
 def dynamic_scrutineering_script():
     """Templated positions.js to allow for base URL rendering"""
-    r = requests.get('https://docs.google.com/spreadsheets/d/e/2PACX-1vQfPSSyRC2uuklVHGwzWLzrsEPmYYmF9dQVeHzGZQKIiovsyHAuSWATx3IDlMbqVBD1Scnbldv8rm9I/pub?gid=0&single=true&output=tsv')
+    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfPSSyRC2uuklVHGwzWLzrsEPmYYmF9dQVeHzGZQKIiovsyHAuSWATx3IDlMbqVBD1Scnbldv8rm9I/pub?gid=0&single=true&output=tsv' # pylint: disable=line-too-long
+    r = requests.get(url, timeout=10)
     if r.status_code != 200:
         logger.error("Failed to fetch data from GitHub API: %s", r.status_code)
         return json.dumps({"error": "Failed to fetch data"}), 500
