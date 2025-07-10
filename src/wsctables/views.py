@@ -28,10 +28,10 @@ def tables_script():
     """Templated wsctables.js to allow for base URL rendering"""
     return flask.render_template("wsctables.js.j2")
 
-@app.route("/api/scrutineering/dynamic/")
+@app.route("/api/scrutineering/")
 #@cache.cached(timeout=30)
 #@flask_cachecontrol.cache_for(seconds=30)
-def dynamic_scrutineering_script():
+def scrutineering_script():
     """Templated positions.js to allow for base URL rendering"""
     url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfPSSyRC2uuklVHGwzWLzrsEPmYYmF9dQVeHzGZQKIiovsyHAuSWATx3IDlMbqVBD1Scnbldv8rm9I/pub?gid=0&single=true&output=tsv' # pylint: disable=line-too-long
     r = requests.get(url, timeout=10)

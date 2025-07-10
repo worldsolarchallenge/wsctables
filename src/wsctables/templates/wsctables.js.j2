@@ -6,7 +6,7 @@ window.wsc = (function() {
   let data;
 
   // URL for route kmz
-  const table_url = '{{ url_for("dynamic_scrutineering_script", _external=True) }}';
+  const table_url = '{{ url_for("scrutineering_script", _external=True) }}';
 
   /**
    * API utilities.
@@ -88,7 +88,7 @@ window.wsc = (function() {
 
     // Fetch last positions for all cars.
     async function getTable() {
-      rdata = await get(telemetry, 'api/scrutineering/dynamic/');
+      rdata = await get(telemetry, 'api/scrutineering/');
         console.log('New table data:', rdata);
       return rdata;
     }
