@@ -42,17 +42,26 @@ window.wsc = (function() {
       rows = [];
       columns = [];
 
-      teams = Object.keys(data);
-      columns = Object.keys(data[teams[0]]).filter(cat => cat !== 'Team' && cat !== 'Name');
+      teamnums = Object.keys(data);
+      categories = Object.keys(data[teamnums[0]]).filter(cat => cat !== 'Team' && cat !== 'Name');
 
-      for (const teamnum of teams) {
+      for (const category of categories) {
         row = [];
         row.push('<tr>');
-        row.push(`<td><strong>${data[teamnum].Team}</strong></td>`);
-        row.push(`<td><strong>${data[teamnum].Name}</strong></td>`);
-        for (const column of columns) {
-          status = data[teamnum][column];
-          row.push(`<td>${status}</td>`);
+        row.push(`<td><strong>${category}</strong></td>`);
+        for (const teamnum of teamnums) {
+          status = data[teamnum][category];
+
+          if (status == 'p') {
+            row.push('<td style="background-color: green;">&nbsp;&nbsp;</td>');
+            console.log(`${teamnum} -- ${category}: "${status}" -- green`);
+          } else if (status == 'f') {
+            row.push('<td style="background-color: red;">&nbsp;&nbsp;</td>');
+            console.log(`${teamnum} -- ${category}: "${status}" -- red `);
+          } else {
+            console.log(`${teamnum} -- ${category}: "${status}" -- white `);
+            row.push('<td style="background-color: white;">&nbsp;&nbsp;</td>');
+          }
         }
         row.push('</tr>');
 
@@ -60,10 +69,10 @@ window.wsc = (function() {
       }
 
       header = [];
-      header.push('<th>Team</th>');
-      header.push('<th>Name</th>');
-      for (const column of columns) {
-        header.push(`<th>${column}</th>`);
+      header.push('<tr>');
+      header.push('<th><span></span></th>');
+      for (const teamnum of teamnums) {
+        header.push(`<th><span>${data[teamnum].Team} ${data[teamnum].Name}</span></th>`);
       }
       header.push('</tr>');
 
@@ -79,7 +88,8 @@ window.wsc = (function() {
 
     // Fetch last positions for all cars.
     async function getTable() {
-      rdata = await get(telemetry, table_url);
+      rdata = await get(telemetry, 'api/scrutineering/');
+        console.log('New table data:', rdata);
       return rdata;
     }
 
@@ -101,7 +111,7 @@ window.wsc = (function() {
       clearInterval(timer);
 
       timer = setInterval(async () => {
-        data = await api.getTable(table_url);
+        data = await api.getTable();
         table.innerHTML = api.renderTable(data);
       }, timeout);
     }
@@ -175,7 +185,7 @@ window.wsc = (function() {
 
     table = document.getElementById("table");
 
-    data = await api.getTable(table_url);
+    data = await api.getTable();
 
     console.log('Table data:', data);
 

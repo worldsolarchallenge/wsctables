@@ -17,14 +17,14 @@
   </head>
 
   <body>
-    <h1>WSC Tables</h1>
+    <h1>WSC Tables -- {{name}}</h1>
 
     <div id="table"></div>
 
-    <script src="{{ url_for('index') }}scripts/wsctables.js"></script>
+    <script src="{{ url_for('index') }}scripts/{{ script_name }}.js"></script>
 
     <script async>
-      window.__wscinitTable();
+      window.__wscinitTable('api/{{ name }}');
       // table.innerHTML = JSON.stringify(data, null, 2);
     </script>
 
