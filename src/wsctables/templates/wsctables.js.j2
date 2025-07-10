@@ -42,16 +42,17 @@ window.wsc = (function() {
       rows = [];
       columns = [];
 
-      teams = Object.keys(data);
-      columns = Object.keys(data[teams[0]]).filter(cat => cat !== 'Team' && cat !== 'Name');
+      teamdata = data["teamdata"];
 
-      for (const teamnum of teams) {
+      columns = Object.keys(teamdata[0]).filter(cat => cat !== 'Team' && cat !== 'Name');
+
+      for (const entry of teamdata) {
         row = [];
         row.push('<tr>');
-        row.push(`<td><strong>${data[teamnum].Team}</strong></td>`);
-        row.push(`<td><strong>${data[teamnum].Name}</strong></td>`);
+        row.push(`<th>${entry.Team}</th>`);
+        row.push(`<th>${entry.Name}</th>`);
         for (const column of columns) {
-          status = data[teamnum][column];
+          status = entry[column];
           row.push(`<td>${status}</td>`);
         }
         row.push('</tr>');

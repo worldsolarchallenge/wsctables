@@ -41,7 +41,7 @@ def get_table_data(url, teams_across=False, split_team_name=False, exclude=[]):
     # Parse the TSV data into a list of lines
     # Assuming the data is tab-separated values (TSV)
 
-    result = {}
+    teamdata = []
 
     header_txt = r.text.splitlines()[0]
     if not header_txt.strip():
@@ -49,8 +49,6 @@ def get_table_data(url, teams_across=False, split_team_name=False, exclude=[]):
         return json.dumps({"error": "No data found"}), 500
 
     colnames = header_txt.split("\t")
-    if teams_across:
-        teamnames = colnames
 
     for line in r.text.splitlines()[1:]:
         if not line.strip():
@@ -70,20 +68,19 @@ def get_table_data(url, teams_across=False, split_team_name=False, exclude=[]):
                     continue
                 (teamnum, teamname) = colnames[i].split(" ", 1)
 
-                if int(teamnum) not in result:
-                    result[int(teamnum)] = {"Team": teamnum, "Name": teamname}
+                if len(teamdata) < i:
+                    teamdata.append({"Team": teamnum, "Name": teamname})
 
                 if columns[0] not in exclude:
-                    result[int(teamnum)][columns[0]] = columns[i]
+                    teamdata[i-1][columns[0]] = columns[i]
         else:
             entry = dict(zip(colnames, columns))
-            teamnum = entry["Team"]
-            teamdata = {key: value for key, value in entry.items()
+            entry_filtered = {key: value for key, value in entry.items()
                         if key not in exclude and key.strip() != ""}
 
-            result[int(teamnum)] = teamdata
+            teamdata.append(entry_filtered)
 
-
+    result = {"teamdata": teamdata}
     return json.dumps(
         result
     )
