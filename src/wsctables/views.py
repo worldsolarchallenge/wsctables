@@ -75,6 +75,9 @@ def get_table_data(url, teams_across=False, split_team_name=False, exclude=[]):
                     teamdata[i-1][columns[0]] = columns[i]
         else:
             entry = dict(zip(colnames, columns))
+            if( entry.get("Team", "").strip() == "" ):
+                continue
+
             entry_filtered = {key: value for key, value in entry.items()
                         if key not in exclude and key.strip() != ""}
 
@@ -140,7 +143,8 @@ def laptimes_data():
     """API Endpoint to fetch laptimes data as JSON"""
     url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS45Yt9IN4RkHt_gPJP_JpV6gxHvXfOBIc4k46OT4eq1fNFfvynYeIuc3G1ZTtTIqbXd9sTgoGFc50W/pub?gid=2081640324&single=true&output=tsv' # pylint: disable=line-too-long
 
-    return get_table_data(url, teams_across=False, exclude=["Track Distance"])
+    return get_table_data(url, teams_across=False,
+        exclude=["Lap time (s)", "Track Distance"])
 
 @app.route("/laptimes.html")
 #@cache.cached(timeout=30)
@@ -150,7 +154,7 @@ def laptimes():
     return flask.render_template(
         "tables.html.j2",
         name="laptimes",
-        script_name="wsctables")
+        script_name="wsctables",)
 
 
 

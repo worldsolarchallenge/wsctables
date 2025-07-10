@@ -47,9 +47,6 @@ window.wsc = (function() {
       columns = Object.keys(teamdata[0]).filter(cat => cat !== 'Team' && cat !== 'Name');
 
       for (const entry of teamdata) {
-        if (entry.Team == "")
-          continue;
-
         row = [];
         row.push('<tr>');
         row.push(`<th>${entry.Team}</th>`);
