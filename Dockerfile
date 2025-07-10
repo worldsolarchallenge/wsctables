@@ -1,7 +1,4 @@
-FROM python:3.11.6-slim
-
-# ENV GOOGLEMAPS_KEY
-# ENV INFLUX_TOKEN
+FROM python:3.13.5-slim
 
 RUN --mount=type=cache,target=/var/cache/apt \
     --mount=type=cache,target=/root/.cache/pip \
@@ -20,4 +17,4 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 # EXPOSE 5000
 
-CMD ["gunicorn", "-w", "4", "--bind", "0.0.0.0:5000", "wscearth:app"]
+CMD ["gunicorn", "-w", "4", "--bind", "0.0.0.0:5000", "wsctables:app"]

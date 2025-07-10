@@ -1,4 +1,4 @@
-"""Main entry point for executing wscearth as a module via python3 -m wscearth"""
+"""Main entry point for executing wsctables as a module via python3 -m wsctables"""
 import argparse
 import logging
 

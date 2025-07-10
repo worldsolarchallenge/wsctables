@@ -1,2 +1,2 @@
-recursive-include wscearth/templates *
-recursive-include wscearth/static *
+recursive-include wsctables/templates *
+recursive-include wsctables/static *

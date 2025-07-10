@@ -1,5 +1,5 @@
 # pylint: disable=duplicate-code
-"""Basic app endpoints for wscearth"""
+"""Basic app endpoints for wsctables."""
 
 import logging
 
