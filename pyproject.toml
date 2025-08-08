@@ -14,6 +14,7 @@ dependencies = [
     "flask_cors",
     "simplejson",
     "requests",
+    "wsctools",
 ]
 
 [build-system]

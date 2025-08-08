@@ -26,6 +26,7 @@ publish: build
 build/testenv: pyproject.toml
 		mkdir -p build && \
 		python3 -m venv build/testenv && \
+		build/testenv/bin/pip install -e ./deps/wsctools && \
 		build/testenv/bin/pip install -e . && \
 		touch $@
 
