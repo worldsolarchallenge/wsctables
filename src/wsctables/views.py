@@ -8,6 +8,8 @@ import flask
 import requests
 import simplejson as json
 
+import wsctools.event_results  # pylint: disable=unused-import
+
 # Circular import recommended here: https://flask.palletsprojects.com/en/3.0.x/patterns/packages/
 from wsctables import app#, cache  # pylint: disable=cyclic-import
 
@@ -19,7 +21,7 @@ logger = logging.getLogger(__name__)
 def index():
     """Render an index page"""
     data = ""
-    for name in ["scrutineering", "judging", "laptimes", "penalties"]:
+    for name in ["scrutineering", "judging", "laptimes", "penalties", "results"]:
         data += f'<a href="{name}.html">{name.capitalize()}</a> | '
     return data
 
@@ -175,4 +177,30 @@ def penalties():
     return flask.render_template(
         "tables.html.j2",
         name="penalties",
+        script_name="wsctables")
+
+
+@app.route("/api/results/")
+#@cache.cached(timeout=30)
+#@flask_cachecontrol.cache_for(seconds=30)
+def results_script():
+    """API Endpoint to fetch results data as JSON"""
+
+    results = wsctools.event_results.generate_results(
+        flask.current_app.config["CREDS_PATH"],
+        flask.current_app.config["CONFIG_YAML"],
+        influx_token_target=flask.current_app.config["INFLUX_TOKEN_TARGET"])
+
+    final_results = {key: value.reset_index().to_dict("records") for key, value in results.items()}
+
+    return final_results["Challenger"]
+
+@app.route("/results.html")
+#@cache.cached(timeout=30)
+#@flask_cachecontrol.cache_for(seconds=30)
+def results():
+    """Render a table"""
+    return flask.render_template(
+        "tables.html.j2",
+        name="results",
         script_name="wsctables")

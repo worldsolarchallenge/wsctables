@@ -36,3 +36,5 @@ The resulting docker container can be published to a docker repository, and run 
 
 Please reach out to the BWSC Technical Faculty, or the BWSC community members via the on-line forum linked from the [BWSC Web Site](https://www.worldsolarchallenge.org/). Contributions welcome, via pull request on [github.com](https://github.com/worldsolarchallenge/wsctables).
 # wsctables
+
+kubectl create secret generic gsheet-creds --from-file=credentials.json --namespace=test
