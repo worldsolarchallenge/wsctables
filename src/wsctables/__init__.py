@@ -2,12 +2,13 @@
 
 import argparse
 import logging
+import os
 
 from flask import Flask
 from flask_caching import Cache
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
-import os
+
 
 config = {
     "DEBUG": True,  # some Flask specific configs
@@ -33,6 +34,7 @@ app.config["CONFIG_YAML"] = os.environ.get("CONFIG_YAML", "config.yaml")
 import wsctables.views  # pylint: disable=wrong-import-position
 
 def main():
+    """Main function to run the Flask app."""
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--port", default=5000)
@@ -52,4 +54,3 @@ if __name__ == "__main__":
     LOG_FORMAT = "%(asctime)s - %(module)s - %(levelname)s - Thread_name: %(threadName)s - %(message)s"
     logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
     main()
-
