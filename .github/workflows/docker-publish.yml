@@ -39,7 +39,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          submodules: 'recursive'
+          submodules: true
           token: ${{ secrets.SUBMODULE_ACCESS_TOKEN }}
 
       # Install the cosign tool except on PR
