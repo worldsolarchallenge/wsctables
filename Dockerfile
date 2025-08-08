@@ -13,6 +13,9 @@ WORKDIR /app
 COPY . /app
 
 RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install /app/deps/wsctools
+
+RUN --mount=type=cache,target=/root/.cache/pip \
     pip install /app
 
 # EXPOSE 5000

@@ -7,7 +7,7 @@ INFLUX_ORG ?= "Bridgestone World Solar Challenge"
 INFLUX_BUCKET ?= test
 
 #GOOGLEMAPS_KEY ?= AIzaSyD4cxmf6zr3SMovEYgZZe9eoEQCglqz3L8
-#ENV_VARS=GOOGLEMAPS_KEY
+ENV_VARS=INFLUX_TOKEN_TARGET CREDS_PATH CONFIG_YAML
 #export $(ENV_VARS)
 
 .PHONY: build run
@@ -26,11 +26,15 @@ publish: build
 build/testenv: pyproject.toml
 		mkdir -p build && \
 		python3 -m venv build/testenv && \
+		build/testenv/bin/pip install -e ./deps/wsctools && \
 		build/testenv/bin/pip install -e . && \
 		touch $@
 
 localtest: build/testenv
 		. $</bin/activate && \
+			INFLUX_TOKEN_TARGET=$$(cat ../wsc_spot_poll/wsc_bucket_token.key) \
+			CREDS_PATH=$(HOME)/secret/event_results-credentials.json \
+			CONFIG_YAML=../config-test.yaml \
 			flask --debug --app wsctables run
 
 lint: build/testenv

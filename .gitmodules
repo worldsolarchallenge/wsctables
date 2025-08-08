@@ -1,0 +1,3 @@
+[submodule "deps/wsctools"]
+	path = deps/wsctools
+	url = git@github.com:worldsolarchallenge/wsctools.git
