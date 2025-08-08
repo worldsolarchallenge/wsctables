@@ -1,15 +1,15 @@
-# pylint: disable=duplicate-code
+# pylint: disable=duplicate-code,dangerous-default-value,too-many-locals,unused-argument
 """Basic app endpoints for wsctables."""
 
 import logging
 
 import flask
-import flask_cachecontrol
+# import flask_cachecontrol
 import requests
 import simplejson as json
 
 # Circular import recommended here: https://flask.palletsprojects.com/en/3.0.x/patterns/packages/
-from wsctables import app, cache  # pylint: disable=cyclic-import
+from wsctables import app#, cache  # pylint: disable=cyclic-import
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +75,7 @@ def get_table_data(url, teams_across=False, split_team_name=False, exclude=[]):
                     teamdata[i-1][columns[0]] = columns[i]
         else:
             entry = dict(zip(colnames, columns))
-            if( entry.get("Team", "").strip() == "" ):
+            if entry.get("Team", "").strip() == "":
                 continue
 
             entry_filtered = {key: value for key, value in entry.items()
