@@ -11,7 +11,7 @@ import simplejson as json
 import wsctools.event_results  # pylint: disable=unused-import
 
 # Circular import recommended here: https://flask.palletsprojects.com/en/3.0.x/patterns/packages/
-from wsctables import app#, cache  # pylint: disable=cyclic-import
+from wsctables import app, cache  # pylint: disable=cyclic-import
 
 logger = logging.getLogger(__name__)
 
@@ -181,19 +181,21 @@ def penalties():
 
 
 @app.route("/api/results/")
-#@cache.cached(timeout=30)
+@cache.cached(timeout=30)
 #@flask_cachecontrol.cache_for(seconds=30)
 def results_script():
     """API Endpoint to fetch results data as JSON"""
 
-    results = wsctools.event_results.generate_results(
-        flask.current_app.config["CREDS_PATH"],
-        flask.current_app.config["CONFIG_YAML"],
-        influx_token_target=flask.current_app.config["INFLUX_TOKEN_TARGET"])
+    with open(flask.current_app.config["CONFIG_YAML"], "r") as config_file:
+        results = wsctools.event_results.generate_results(
+            config_file,
+            influx_token_target=flask.current_app.config["INFLUX_TOKEN_TARGET"],
+            servicetoken_path=flask.current_app.config["CREDS_PATH"],
+            )
 
     final_results = {key: value.reset_index().to_dict("records") for key, value in results.items()}
 
-    return final_results["Challenger"]
+    return json.dumps(final_results, ignore_nan=True)
 
 @app.route("/results.html")
 #@cache.cached(timeout=30)

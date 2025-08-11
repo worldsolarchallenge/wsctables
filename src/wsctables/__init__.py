@@ -28,7 +28,7 @@ cors = CORS(app)
 
 
 app.config["INFLUX_TOKEN_TARGET"] = os.environ.get("INFLUX_TOKEN_TARGET", None)
-app.config["CREDS_PATH"] = os.environ.get("CREDS_PATH", "credentials.json")
+app.config["CREDS_PATH"] = os.environ.get("CREDS_PATH", "credentials.json") # service account key
 app.config["CONFIG_YAML"] = os.environ.get("CONFIG_YAML", "config.yaml")
 
 import wsctables.views  # pylint: disable=wrong-import-position
