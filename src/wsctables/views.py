@@ -4,7 +4,7 @@
 import logging
 
 import flask
-# import flask_cachecontrol
+import flask_cachecontrol
 import requests
 import simplejson as json
 
@@ -16,8 +16,8 @@ from wsctables import app, cache  # pylint: disable=cyclic-import
 logger = logging.getLogger(__name__)
 
 @app.route("/")
-#@cache.cached(timeout=30)
-#@flask_cachecontrol.cache_for(seconds=30)
+@cache.cached(timeout=30)
+@flask_cachecontrol.cache_for(seconds=30)
 def index():
     """Render an index page"""
     data = ""
@@ -91,15 +91,15 @@ def get_table_data(url, teams_across=False, split_team_name=False, exclude=[]):
     )
 
 @app.route("/scripts/scrutineering.js")
-#@cache.cached()
+@cache.cached()
 def scrutineering_script():
     """Templated wsctables.js to allow for base URL rendering"""
     return flask.render_template("scrutineering.js.j2")
 
 
 @app.route("/api/scrutineering/")
-#@cache.cached(timeout=30)
-#@flask_cachecontrol.cache_for(seconds=30)
+@cache.cached(timeout=30)
+@flask_cachecontrol.cache_for(seconds=30)
 def scrutineering_data():
     """API Endpoint to fetch scrutineering data as JSON"""
     url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfPSSyRC2uuklVHGwzWLzrsEPmYYmF9dQVeHzGZQKIiovsyHAuSWATx3IDlMbqVBD1Scnbldv8rm9I/pub?gid=0&single=true&output=tsv' # pylint: disable=line-too-long
@@ -107,8 +107,8 @@ def scrutineering_data():
     return get_table_data(url, teams_across=True, split_team_name=True)
 
 @app.route("/scrutineering.html")
-#@cache.cached(timeout=30)
-#@flask_cachecontrol.cache_for(seconds=30)
+@cache.cached(timeout=30)
+@flask_cachecontrol.cache_for(seconds=30)
 def scrutineering():
     """Render a table"""
     return flask.render_template(
@@ -118,8 +118,8 @@ def scrutineering():
 
 
 @app.route("/api/judging/")
-#@cache.cached(timeout=30)
-#@flask_cachecontrol.cache_for(seconds=30)
+@cache.cached(timeout=30)
+@flask_cachecontrol.cache_for(seconds=30)
 def judging_data():
     """API Endpoint to fetch judging data as JSON"""
     url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSW1_kFF14mV0s7cx5DKpqCMnUQvGEtKv0J_xlFuG9Hg4KgdYKHFzcTAZncN3dYivgH3xANeP1wze0R/pub?gid=15742234&single=true&output=tsv' # pylint: disable=line-too-long
@@ -127,8 +127,8 @@ def judging_data():
     return get_table_data(url)
 
 @app.route("/judging.html")
-#@cache.cached(timeout=30)
-#@flask_cachecontrol.cache_for(seconds=30)
+@cache.cached(timeout=30)
+@flask_cachecontrol.cache_for(seconds=30)
 def judging():
     """Render a table"""
     return flask.render_template(
@@ -139,8 +139,8 @@ def judging():
 
 
 @app.route("/api/laptimes/")
-#@cache.cached(timeout=30)
-#@flask_cachecontrol.cache_for(seconds=30)
+@cache.cached(timeout=30)
+@flask_cachecontrol.cache_for(seconds=30)
 def laptimes_data():
     """API Endpoint to fetch laptimes data as JSON"""
     url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS45Yt9IN4RkHt_gPJP_JpV6gxHvXfOBIc4k46OT4eq1fNFfvynYeIuc3G1ZTtTIqbXd9sTgoGFc50W/pub?gid=2081640324&single=true&output=tsv' # pylint: disable=line-too-long
@@ -149,8 +149,8 @@ def laptimes_data():
         exclude=["Lap time (s)", "Track Distance"])
 
 @app.route("/laptimes.html")
-#@cache.cached(timeout=30)
-#@flask_cachecontrol.cache_for(seconds=30)
+@cache.cached(timeout=30)
+@flask_cachecontrol.cache_for(seconds=30)
 def laptimes():
     """Render a table"""
     return flask.render_template(
@@ -161,8 +161,8 @@ def laptimes():
 
 
 @app.route("/api/penalties/")
-#@cache.cached(timeout=30)
-#@flask_cachecontrol.cache_for(seconds=30)
+@cache.cached(timeout=30)
+@flask_cachecontrol.cache_for(seconds=30)
 def penalties_script():
     """API Endpoint to fetch penalties data as JSON"""
     url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS45Yt9IN4RkHt_gPJP_JpV6gxHvXfOBIc4k46OT4eq1fNFfvynYeIuc3G1ZTtTIqbXd9sTgoGFc50W/pub?gid=662069405&single=true&output=tsv' # pylint: disable=line-too-long
@@ -170,8 +170,8 @@ def penalties_script():
     return get_table_data(url, teams_across=False)
 
 @app.route("/penalties.html")
-#@cache.cached(timeout=30)
-#@flask_cachecontrol.cache_for(seconds=30)
+@cache.cached(timeout=30)
+@flask_cachecontrol.cache_for(seconds=30)
 def penalties():
     """Render a table"""
     return flask.render_template(
@@ -182,7 +182,7 @@ def penalties():
 
 @app.route("/api/results/")
 @cache.cached(timeout=30)
-#@flask_cachecontrol.cache_for(seconds=30)
+@flask_cachecontrol.cache_for(seconds=30)
 def results_script():
     """API Endpoint to fetch results data as JSON"""
 

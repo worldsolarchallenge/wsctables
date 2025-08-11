@@ -33,7 +33,7 @@ build/testenv: pyproject.toml
 localtest: build/testenv
 		. $</bin/activate && \
 			INFLUX_TOKEN_TARGET=$$(cat ../wsc_spot_poll/wsc_bucket_token.key) \
-			CREDS_PATH=$(HOME)/secret/event_results-credentials.json \
+			CREDS_PATH=$(HOME)/secret/wsctables-credentials.json \
 			CONFIG_YAML=../config-test.yaml \
 			flask --debug --app wsctables run
 
