@@ -186,7 +186,7 @@ def penalties():
 def results_script():
     """API Endpoint to fetch results data as JSON"""
 
-    with open(flask.current_app.config["CONFIG_YAML"], "r") as config_file:
+    with open(flask.current_app.config["CONFIG_YAML"], "r", encoding="utf-8") as config_file:
         results = wsctools.event_results.generate_results(
             config_file,
             influx_token_target=flask.current_app.config["INFLUX_TOKEN_TARGET"],
