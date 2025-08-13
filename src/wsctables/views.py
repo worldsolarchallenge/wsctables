@@ -27,7 +27,7 @@ def index():
 
 
 @app.route("/scripts/wsctables.js")
-#@cache.cached()
+@cache.cached()
 def tables_script():
     """Templated wsctables.js to allow for base URL rendering"""
     return flask.render_template("wsctables.js.j2")
@@ -198,8 +198,8 @@ def results_script():
     return json.dumps(final_results, ignore_nan=True)
 
 @app.route("/results.html")
-#@cache.cached(timeout=30)
-#@flask_cachecontrol.cache_for(seconds=30)
+@cache.cached(timeout=30)
+@flask_cachecontrol.cache_for(seconds=30)
 def results():
     """Render a table"""
     return flask.render_template(
