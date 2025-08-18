@@ -13,10 +13,8 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 config = {
     "DEBUG": True,  # some Flask specific configs
     "CACHE_TYPE": "FileSystemCache",  # Flask-Caching related configs
+    "CACHE_DIR": os.environ.get("CACHE_DIR", "/tmp/wsctables_cache"),  # Directory for cache files
     "CACHE_DEFAULT_TIMEOUT": 300,
-    "CACHE_DIR": "cache",  # Directory to store cache files
-    "CACHE_THRESHOLD": 1000,  # Maximum number of items to cache
-    "CACHE_KEY_PREFIX": "wsctables_",  # Prefix for cache keys
 }
 app = Flask(__name__)
 
