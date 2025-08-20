@@ -19,7 +19,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        apt-get install memcached libmemcached-dev gcc zlib1g-dev
+        apt-get install -y memcached libmemcached-dev gcc zlib1g-dev
         python -m pip install --upgrade pip
         pip install pylint
         pip install deps/wsctools
