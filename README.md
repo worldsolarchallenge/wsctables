@@ -36,3 +36,7 @@ The resulting docker container can be published to a docker repository, and run 
 
 Please reach out to the BWSC Technical Faculty, or the BWSC community members via the on-line forum linked from the [BWSC Web Site](https://www.worldsolarchallenge.org/). Contributions welcome, via pull request on [github.com](https://github.com/worldsolarchallenge/wsctables).
 # wsctables
+
+
+## Other notes: 
+On mac OS X: LIBMEMCACHED=/opt/homebrew/Cellar/libmemcached/1.0.18_2 pip install pylibmc

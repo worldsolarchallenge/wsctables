@@ -39,7 +39,7 @@ localtest: build/testenv
 
 lint: build/testenv
 		source $</bin/activate && \
-				pip install pylint && \
+				pip install pylint pylibmc && \
 				pylint $$(git ls-files '*.py')
 
 clean:
