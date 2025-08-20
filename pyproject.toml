@@ -15,6 +15,7 @@ dependencies = [
     "simplejson",
     "requests",
     "wsctools",
+    "pylibmc"
 ]
 
 [build-system]
