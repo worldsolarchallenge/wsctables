@@ -181,8 +181,8 @@ def penalties():
 
 
 @app.route("/api/results/")
-@cache.cached(timeout=30)
-@flask_cachecontrol.cache_for(seconds=30)
+@cache.cached(timeout=300)
+@flask_cachecontrol.cache_for(seconds=300)
 def results_script():
     """API Endpoint to fetch results data as JSON"""
 
