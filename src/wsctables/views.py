@@ -142,7 +142,7 @@ def judging():
 @cache.cached(timeout=30)
 @flask_cachecontrol.cache_for(seconds=300)
 def laptimes_data():
-    # """API Endpoint to fetch laptimes data as JSON"""
+    """API Endpoint to fetch laptimes data as JSON"""
     # url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS45Yt9IN4RkHt_gPJP_JpV6gxHvXfOBIc4k46OT4eq1fNFfvynYeIuc3G1ZTtTIqbXd9sTgoGFc50W/pub?gid=2081640324&single=true&output=tsv' # pylint: disable=line-too-long
 
     # return get_table_data(url, teams_across=False,
