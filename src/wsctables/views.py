@@ -102,9 +102,19 @@ def scrutineering_script():
 @flask_cachecontrol.cache_for(seconds=300)
 def scrutineering_data():
     """API Endpoint to fetch scrutineering data as JSON"""
-    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfPSSyRC2uuklVHGwzWLzrsEPmYYmF9dQVeHzGZQKIiovsyHAuSWATx3IDlMbqVBD1Scnbldv8rm9I/pub?gid=0&single=true&output=tsv' # pylint: disable=line-too-long
+    # url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfPSSyRC2uuklVHGwzWLzrsEPmYYmF9dQVeHzGZQKIiovsyHAuSWATx3IDlMbqVBD1Scnbldv8rm9I/pub?gid=0&single=true&output=tsv' # pylint: disable=line-too-long
 
-    return get_table_data(url, teams_across=True, split_team_name=True)
+    # return get_table_data(url, teams_across=True, split_team_name=True)
+
+    data = wsctools.event_results.get_sheet("Scrutineering",
+                                            sheet_id="10DqDmwhgoR-3dfzIBYZ-UUQ6yNhlz3McaF6YT2PGGQI",
+                                            servicetoken_path=flask.current_app.config["CREDS_PATH"],
+                                            teams_across=True
+                                            )
+    result = {"teamdata": data}
+    return json.dumps(
+        result
+    )
 
 @app.route("/scrutineering.html")
 @cache.cached(timeout=30)
@@ -122,9 +132,19 @@ def scrutineering():
 @flask_cachecontrol.cache_for(seconds=300)
 def judging_data():
     """API Endpoint to fetch judging data as JSON"""
-    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSW1_kFF14mV0s7cx5DKpqCMnUQvGEtKv0J_xlFuG9Hg4KgdYKHFzcTAZncN3dYivgH3xANeP1wze0R/pub?gid=15742234&single=true&output=tsv' # pylint: disable=line-too-long
+    # url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSW1_kFF14mV0s7cx5DKpqCMnUQvGEtKv0J_xlFuG9Hg4KgdYKHFzcTAZncN3dYivgH3xANeP1wze0R/pub?gid=15742234&single=true&output=tsv' # pylint: disable=line-too-long
 
-    return get_table_data(url)
+    # return get_table_data(url)
+
+    data = wsctools.event_results.get_sheet("Pivot Table",
+                                            sheet_id="1UBefRKzZEE4OG9CnfgKbndIKtbooL0lTKc55NE65N1E",
+                                            servicetoken_path=flask.current_app.config["CREDS_PATH"],
+                                            exclude=["Lap time (s)", "Track Distance"]
+                                            )
+    result = {"teamdata": data}
+    return json.dumps(
+        result
+    )
 
 @app.route("/judging.html")
 @cache.cached(timeout=30)
