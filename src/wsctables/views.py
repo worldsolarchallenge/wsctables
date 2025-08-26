@@ -142,11 +142,22 @@ def judging():
 @cache.cached(timeout=30)
 @flask_cachecontrol.cache_for(seconds=30)
 def laptimes_data():
-    """API Endpoint to fetch laptimes data as JSON"""
-    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS45Yt9IN4RkHt_gPJP_JpV6gxHvXfOBIc4k46OT4eq1fNFfvynYeIuc3G1ZTtTIqbXd9sTgoGFc50W/pub?gid=2081640324&single=true&output=tsv' # pylint: disable=line-too-long
+    # """API Endpoint to fetch laptimes data as JSON"""
+    # url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS45Yt9IN4RkHt_gPJP_JpV6gxHvXfOBIc4k46OT4eq1fNFfvynYeIuc3G1ZTtTIqbXd9sTgoGFc50W/pub?gid=2081640324&single=true&output=tsv' # pylint: disable=line-too-long
 
-    return get_table_data(url, teams_across=False,
-        exclude=["Lap time (s)", "Track Distance"])
+    # return get_table_data(url, teams_across=False,
+    #     exclude=["Lap time (s)", "Track Distance"])
+
+
+    data = wsctools.event_results.get_sheet("Lap times",
+                                            servicetoken_path=flask.current_app.config["CREDS_PATH"],
+                                            exclude=["Lap time (s)", "Track Distance"]
+                                            )
+    result = {"teamdata": data}
+    return json.dumps(
+        result
+    )
+
 
 @app.route("/laptimes.html")
 @cache.cached(timeout=30)
@@ -165,9 +176,17 @@ def laptimes():
 @flask_cachecontrol.cache_for(seconds=30)
 def penalties_script():
     """API Endpoint to fetch penalties data as JSON"""
-    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS45Yt9IN4RkHt_gPJP_JpV6gxHvXfOBIc4k46OT4eq1fNFfvynYeIuc3G1ZTtTIqbXd9sTgoGFc50W/pub?gid=662069405&single=true&output=tsv' # pylint: disable=line-too-long
+#    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS45Yt9IN4RkHt_gPJP_JpV6gxHvXfOBIc4k46OT4eq1fNFfvynYeIuc3G1ZTtTIqbXd9sTgoGFc50W/pub?gid=662069405&single=true&output=tsv' # pylint: disable=line-too-long
+#    return get_table_data(url, teams_across=False)
 
-    return get_table_data(url, teams_across=False)
+    data = wsctools.event_results.get_sheet("Penalties",
+                                            servicetoken_path=flask.current_app.config["CREDS_PATH"],
+                                            )
+    result = {"teamdata": data}
+    return json.dumps(
+        result
+    )
+
 
 @app.route("/penalties.html")
 @cache.cached(timeout=30)
