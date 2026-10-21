@@ -6,7 +6,6 @@ name: Docker
 # documentation.
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: '18 9 * * *'
   push:
@@ -15,6 +14,7 @@ on:
     tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -37,15 +37,18 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          token: ${{ secrets.SUBMODULE_ACCESS_TOKEN }}
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
         if: github.event_name != 'pull_request'
-        uses: sigstore/cosign-installer@6e04d228eb30da1757ee4e1dd75a0ec73a653e06 #v3.1.1
+        uses: sigstore/cosign-installer@v3.9.1
         with:
-          cosign-release: 'v2.1.1'
+          cosign-release: 'v2.5.2'
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
